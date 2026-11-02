@@ -14,20 +14,24 @@ public class ProductsController : APIBaseController
 
     private readonly IGenericRepositories<Product> _productRepo;
     private readonly IMapper _mapper;
+    private readonly IGenericRepositories<ProductType> _typeRepo;
+    private readonly IGenericRepositories<ProductBrand> _brandRepo;
 
-    public ProductsController(IGenericRepositories<Product> ProductRepo, IMapper mapper)
+    public ProductsController(IGenericRepositories<Product> ProductRepo, IMapper mapper,IGenericRepositories<ProductType>Typo,IGenericRepositories<ProductBrand>Brand)
     {
         _productRepo = ProductRepo;
         _mapper = mapper;
+        _typeRepo = Typo;
+        _brandRepo=Brand;
     }
 
     [HttpGet]
 
-    public async Task<ActionResult<IEnumerable<ProductToReturnDTO>>> GetProducts()
+    public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts()
     {
         var spec=new ProductWithBrandAndTypeSpec();
         var products = await _productRepo.GetAllWithSpec(spec);
-        var productsDto = _mapper.Map< IEnumerable<ProductToReturnDTO>>(products);
+        var productsDto = _mapper.Map< IReadOnlyList<ProductToReturnDTO>>(products);
         return Ok(productsDto);
     }
     [HttpGet("{id}")]
@@ -41,4 +45,18 @@ public class ProductsController : APIBaseController
         var productDto = _mapper.Map<ProductToReturnDTO>(product);
         return Ok(productDto);
     }
+
+    [HttpGet("Types")]
+    public async Task<ActionResult<IReadOnlyList<ProductType>>>GetTypes()
+    {
+        var types = await _typeRepo.GetAllAsync();
+        return Ok(types);
+    }
+    [HttpGet("Brands")]
+    public async Task<ActionResult<IReadOnlyList<ProductBrand>>>GetBrands()
+    {
+        var brands = await _brandRepo.GetAllAsync();
+        return Ok(brands);
+    }
+
 }
