@@ -6,6 +6,7 @@ using Talabat.Core.Specification;
 using AutoMapper;
 using Talabat.APIs.DTOs;
 using Talabat.APIs.Errors;
+using Talabat.APIs.Helper;
 
 namespace Talabat.APIs.Controllers;
 
@@ -27,12 +28,12 @@ public class ProductsController : APIBaseController
 
     [HttpGet]
 
-    public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts(string? sort,int? typeId,int? brandId)
+    public async Task<ActionResult<IReadOnlyList<Pagination<ProductToReturnDTO>>>> GetProducts([FromQuery]ProductSpecParam param)
     {
-        var spec=new ProductWithBrandAndTypeSpec(sort,typeId,brandId);
+        var spec=new ProductWithBrandAndTypeSpec(param);
         var products = await _productRepo.GetAllWithSpec(spec);
         var productsDto = _mapper.Map< IReadOnlyList<ProductToReturnDTO>>(products);
-        return Ok(products);
+        return Ok(new Pagination<ProductToReturnDTO>(param.pageIndex, param.pageSize, products.Count, productsDto));
     }
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -3,9 +3,8 @@ using Talabat.Core.Models;
 using Talabat.Core.Specification;
 
 namespace Talabat.Repository;
-public static class SpecificationEvalutor<T> where T : BaseEntity
+public static class SpecificationEvaluator<T> where T : BaseEntity
 {
-
     public static IQueryable<T>GetQuery(IQueryable<T> inputQuery, ISpecification<T> spec)
     {
         var Query =inputQuery;
@@ -23,7 +22,11 @@ public static class SpecificationEvalutor<T> where T : BaseEntity
         {
             Query = Query.OrderByDescending(spec.OrderByDescending);
         }
-        Query =spec.Includes.Aggregate(Query, (current, includeExperession) => current.Include(includeExperession));
+       if(spec.IsPagingEnabled)
+        {
+            Query = Query.Skip(spec.Skip).Take(spec.Take);
+        }
+        Query =spec.Includes.Aggregate(Query, (current, includeExpression) => current.Include(includeExpression));
         
         return Query;
     }

@@ -31,7 +31,7 @@ public class GenericRepository<T> : IGenericRepositories<T> where T : BaseEntity
     }
     private IQueryable<T> ApplySpecification(ISpecification<T> spec)
     {
-        return SpecificationEvalutor<T>.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
+        return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
     }
 }
 

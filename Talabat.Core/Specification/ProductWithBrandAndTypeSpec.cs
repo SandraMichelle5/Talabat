@@ -8,15 +8,15 @@ using Talabat.Core.Models;
 namespace Talabat.Core.Specification;
 public class ProductWithBrandAndTypeSpec : BaseSpecification<Product>
 {
-    public ProductWithBrandAndTypeSpec(string? sort,int? typeId,int? brandId) : 
-                                      base(p=>(!typeId.HasValue || p.ProductType.Id==typeId )
-                                      && (!brandId.HasValue || p.ProductBrand.Id==brandId))
+    public ProductWithBrandAndTypeSpec(ProductSpecParam param) : 
+                                      base(p=>(!param.typeId.HasValue || p.ProductType.Id== param.typeId)
+                                      && (!param.brandId.HasValue || p.ProductBrand.Id== param.brandId))
     {
         Includes.Add(p => p.ProductBrand);
         Includes.Add(p => p.ProductType);
-        if (!string.IsNullOrEmpty(sort))
+        if (!string.IsNullOrEmpty(param.sort))
         {
-            switch (sort)
+            switch (param.sort)
             {
                 case "PriceAsc":
                     SetOrderBy(p => p.Price);
@@ -31,8 +31,8 @@ public class ProductWithBrandAndTypeSpec : BaseSpecification<Product>
                     SetOrderBy(p=> p.Name);
                     break;
             }
-
         }
+        ApplyPaging(param.pageSize * (param.pageIndex - 1), param.pageSize);
     }
     public ProductWithBrandAndTypeSpec(int id) : base(p => p.Id == id)
     {
