@@ -15,7 +15,15 @@ public static class SpecificationEvalutor<T> where T : BaseEntity
             Query = Query.Where(spec.Criteria);
         }
 
-        Query=spec.Includes.Aggregate(Query, (current, includeExperession) => current.Include(includeExperession));
+       if(spec.OrderBy != null)
+        {
+            Query = Query.OrderBy(spec.OrderBy);
+        }
+       if(spec.OrderByDescending != null)
+        {
+            Query = Query.OrderByDescending(spec.OrderByDescending);
+        }
+        Query =spec.Includes.Aggregate(Query, (current, includeExperession) => current.Include(includeExperession));
         
         return Query;
     }

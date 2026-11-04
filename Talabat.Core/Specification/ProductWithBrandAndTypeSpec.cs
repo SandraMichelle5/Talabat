@@ -8,10 +8,29 @@ using Talabat.Core.Models;
 namespace Talabat.Core.Specification;
 public class ProductWithBrandAndTypeSpec : BaseSpecification<Product>
 {
-    public ProductWithBrandAndTypeSpec() : base()
+    public ProductWithBrandAndTypeSpec(string? sort) : base()
     {
         Includes.Add(p => p.ProductBrand);
         Includes.Add(p => p.ProductType);
+        if (!string.IsNullOrEmpty(sort))
+        {
+            switch (sort)
+            {
+                case "PriceAsc":
+                    SetOrderBy(p => p.Price);
+                    break;
+                    case "PriceDesc":
+                    SetOrderByDescending(p => p.Price);
+                    break;
+                    case "NameDesc":
+                    SetOrderByDescending(p => p.Name);
+                    break;
+                default:
+                    SetOrderBy(p=> p.Name);
+                    break;
+            }
+
+        }
     }
     public ProductWithBrandAndTypeSpec(int id) : base(p => p.Id == id)
     {

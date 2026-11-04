@@ -27,9 +27,9 @@ public class ProductsController : APIBaseController
 
     [HttpGet]
 
-    public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts()
+    public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts(string? sort)
     {
-        var spec=new ProductWithBrandAndTypeSpec();
+        var spec=new ProductWithBrandAndTypeSpec(sort);
         var products = await _productRepo.GetAllWithSpec(spec);
         var productsDto = _mapper.Map< IReadOnlyList<ProductToReturnDTO>>(products);
         return Ok(productsDto);
