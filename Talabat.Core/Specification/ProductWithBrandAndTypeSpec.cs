@@ -8,7 +8,9 @@ using Talabat.Core.Models;
 namespace Talabat.Core.Specification;
 public class ProductWithBrandAndTypeSpec : BaseSpecification<Product>
 {
-    public ProductWithBrandAndTypeSpec(string? sort) : base()
+    public ProductWithBrandAndTypeSpec(string? sort,int? typeId,int? brandId) : 
+                                      base(p=>(!typeId.HasValue || p.ProductType.Id==typeId )
+                                      && (!brandId.HasValue || p.ProductBrand.Id==brandId))
     {
         Includes.Add(p => p.ProductBrand);
         Includes.Add(p => p.ProductType);

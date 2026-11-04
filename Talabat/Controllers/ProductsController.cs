@@ -27,12 +27,12 @@ public class ProductsController : APIBaseController
 
     [HttpGet]
 
-    public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts(string? sort)
+    public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts(string? sort,int? typeId,int? brandId)
     {
-        var spec=new ProductWithBrandAndTypeSpec(sort);
+        var spec=new ProductWithBrandAndTypeSpec(sort,typeId,brandId);
         var products = await _productRepo.GetAllWithSpec(spec);
         var productsDto = _mapper.Map< IReadOnlyList<ProductToReturnDTO>>(products);
-        return Ok(productsDto);
+        return Ok(products);
     }
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
