@@ -10,6 +10,7 @@ using Talabat.APIs.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Extensions;
+using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<dbContext>(Options =>
@@ -18,6 +19,11 @@ builder.Services.AddDbContext<dbContext>(Options =>
 
 });
 builder.Services.AddApplicationServices();
+builder.Services.AddSingleton<IConnectionMultiplexer>(options =>
+{
+    var connection = builder.Configuration.GetConnectionString("RedisConnection");
+    return ConnectionMultiplexer.Connect(connection);
+});
 
 var app = builder.Build();
 

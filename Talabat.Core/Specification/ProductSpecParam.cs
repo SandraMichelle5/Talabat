@@ -19,4 +19,13 @@ public class ProductSpecParam
         get { return _pageSize; }
         set { _pageSize = (value > 10) ? _pageSize : value; }
     }
+    private string? search;
+
+    public string? Search
+    {
+        get { return search; }
+        set { search = value.ToLower(); }
+    }
+
+
 }

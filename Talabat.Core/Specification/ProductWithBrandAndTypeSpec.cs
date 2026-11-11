@@ -9,8 +9,8 @@ namespace Talabat.Core.Specification;
 public class ProductWithBrandAndTypeSpec : BaseSpecification<Product>
 {
     public ProductWithBrandAndTypeSpec(ProductSpecParam param) : 
-                                      base(p=>(!param.typeId.HasValue || p.ProductType.Id== param.typeId)
-                                      && (!param.brandId.HasValue || p.ProductBrand.Id== param.brandId))
+                                      base (p => (string.IsNullOrEmpty(param.Search) || p.Name.ToLower().Contains(param.Search.ToLower())) && ((!param.typeId.HasValue || p.ProductType.Id== param.typeId)
+                                      && (!param.brandId.HasValue || p.ProductBrand.Id == param.brandId)))  
     {
         Includes.Add(p => p.ProductBrand);
         Includes.Add(p => p.ProductType);

@@ -16,7 +16,7 @@ public static class ApplicationServiceExtensions
         Services.AddSwaggerGen();
         Services.AddOpenApi();
         Services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepository<>));
-
+        Services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
         Services.AddAutoMapper(typeof(MappingProfiles));
         Services.Configure<ApiBehaviorOptions>(options =>
         {
